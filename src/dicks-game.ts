@@ -164,7 +164,9 @@ class DicksGame {
         player.addScore(3);
         this.playersManager.save();
 
-        const distance = Math.round(Math.random() * 100);
+        const distance = Math.round(
+            Math.random() * (player.getDickSize() * 3.3),
+        );
         this.replyTo(
             msg,
             `Без відомих нікому причин ви кінчили на дистанцію в ${distance} см.`,

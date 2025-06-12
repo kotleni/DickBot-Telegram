@@ -3,6 +3,7 @@ import { Case } from "./managers/cases-manager";
 
 function renderPlayerProfile(player: Player): string {
     let buffer = `Гравець ${player.getFirstName()}`;
+    buffer += `\n🎯 Ранг: ${player.getPlayerGender()}`;
     buffer += `\n⭐️ XP: ${player.getScore()}`;
     if (player.isHaveDick()) buffer += `\n🍆 Пеніс: ${player.getDickSize()} см`;
     else buffer += `\n🍆 Немає пенісу. (Відновити: /dick)`;

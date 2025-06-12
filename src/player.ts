@@ -34,6 +34,20 @@ class Player {
         return this.data.dickSize;
     }
 
+    getPlayerGender(): string {
+        const dickSize = this.getDickSize();
+        if (dickSize < 2) return "Дівчина";
+        if (dickSize < 10) return "Фембой";
+        if (dickSize > 70) return "Секс-монстер";
+        if (dickSize > 333) return "HOMELANDER";
+
+        const score = this.getScore();
+        if (score < 2) return "Хлопчик";
+        if (score < 66) return "Хлопець";
+        if (score < 999) return "Чоловік";
+        return "Дід";
+    }
+
     getUsername(): string {
         return this.data.username;
     }

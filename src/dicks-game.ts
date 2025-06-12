@@ -30,6 +30,7 @@ class DicksGame {
         this.bot.onText(/\/dick/, (msg) => this.onDickCommand(msg));
         this.bot.onText(/\/topdicks/, (msg) => this.onTopCommand(msg));
         this.bot.onText(/\/me/, (msg) => this.onMeCommand(msg));
+        this.bot.onText(/\/cum/, (msg) => this.onCumCommand(msg));
     }
 
     private replyTo(msg: Message, text: string) {
@@ -143,6 +144,34 @@ class DicksGame {
         }
         const output = renderPlayerProfile(player!!);
         this.replyTo(msg, output);
+    }
+
+    private onCumCommand(msg: Message) {
+        if (!msg.from) return;
+
+        const userId = msg.from.id.toString();
+
+        const player = this.playersManager.getPlayer(userId);
+        if (player === undefined) {
+            this.replyUnregisteredWarning(msg);
+            return;
+        }
+
+        if (!player.isHaveDick()) {
+            return this.replyTo(msg, "Вибач, але у тебе немає прутня.");
+        }
+
+        player.addScore(3);
+        this.playersManager.save();
+
+        const distance = Math.round(Math.random() * 100);
+        this.replyTo(
+            msg,
+            `Без відомих нікому причин ви кінчили на дистанцію в ${distance} см.`,
+        );
+        if (distance > 89) {
+            this.replyTo(msg, `https://www.youtube.com/watch?v=j0lN0w5HVT8`);
+        }
     }
 }
 

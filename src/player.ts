@@ -31,6 +31,7 @@ class Player {
     }
 
     getDickSize(): number {
+        if (this.data.dickSize < 0) this.data.dickSize = 0;
         return this.data.dickSize;
     }
 

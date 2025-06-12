@@ -116,7 +116,7 @@ class DicksGame {
 
         const allPlayers = this.playersManager.getAllPlayers();
         const topPlayers = allPlayers.sort(
-            (a, b) => b.getScore() - a.getScore(),
+            (a, b) => b.getDickSize() - a.getDickSize(),
         );
         if (topPlayers.length === 0)
             return this.replyTo(

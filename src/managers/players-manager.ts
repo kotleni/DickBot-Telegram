@@ -69,6 +69,10 @@ class PlayersManager {
         this.save();
         return player;
     }
+
+    getRandomPlayer() {
+        return this.players[Math.floor(Math.random() * this.players.length)];
+    }
 }
 
 export { PlayersManager };

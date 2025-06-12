@@ -164,15 +164,24 @@ class DicksGame {
         player.addScore(3);
         this.playersManager.save();
 
-        const distance = Math.round(
-            Math.random() * (player.getDickSize() * 3.3),
-        );
+        const distance = Math.round(Math.random() * 100);
         this.replyTo(
             msg,
             `Без відомих нікому причин ви кінчили на дистанцію в ${distance} см.`,
         );
         if (distance > 89) {
-            this.replyTo(msg, `https://www.youtube.com/watch?v=j0lN0w5HVT8`);
+            const secondPlayer = this.playersManager.getRandomPlayer();
+            const playerFirstName = player.getFirstName();
+            const secondPlayerFirstName = secondPlayer.getFirstName();
+
+            const playerLink = `<a href="tg://user?id=${player.getId()}">${playerFirstName}</a>`;
+            const secondPlayerLink = `<a href="tg://user?id=${secondPlayer.getId()}">${secondPlayerFirstName}</a>`;
+
+            this.bot?.sendMessage(
+                msg.chat.id,
+                `Увага! 😍\nГравець ${playerLink} випадково обкінчав гравця ${secondPlayerLink}.`,
+                { parse_mode: "HTML" },
+            );
         }
     }
 }

@@ -92,26 +92,6 @@ class TreeGame {
             (a, b) => b.treeSize - a.treeSize,
         );
     }
-
-    getPidrOfTheDay(): PlayerData | null {
-        const players = Object.values(this.userData);
-
-        if (players.length === 0) {
-            return null;
-        }
-
-        players.sort((a, b) => a.name.localeCompare(b.name));
-
-        const today = new Date();
-        const dateSeed =
-            today.getFullYear() * 10000 +
-            (today.getMonth() + 1) * 100 +
-            today.getDate();
-
-        const winnerIndex = dateSeed % players.length;
-
-        return players[winnerIndex];
-    }
 }
 
 require("dotenv").config();
@@ -187,31 +167,6 @@ bot.onText(/\/topdicks/, (msg) => {
     }
 
     bot.sendMessage(chatId, text, { parse_mode: "HTML" });
-});
-
-bot.onText(/\/whogaytoday/, (msg) => {
-    const chatId = msg.chat.id;
-    const gayOfTheDay = treeGame.getPidrOfTheDay();
-
-    if (!gayOfTheDay) {
-        bot.sendMessage(
-            chatId,
-            "У нас ще немає кандидатів! Потрібно більше гравців.",
-        );
-        return;
-    }
-
-    const message = `
-🏳️‍🌈 <b>ГЕЙ ДНЯ</b> 🏳️‍🌈
-
-Сьогодні, за підрахунками зірок, позицією Марса та курсом біткоїна, головним геєм призначається...
-
-✨ <b>${gayOfTheDay.name}</b> ✨
-
-Наші вітання!
-`;
-
-    bot.sendMessage(chatId, message, { parse_mode: "HTML" });
 });
 
 bot.onText(/азік/i, (msg) => {

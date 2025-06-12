@@ -1,7 +1,20 @@
-type Case = { message: string; value: number };
+interface Case {
+    message: string;
+    value: number;
+}
 
 const regularCases: Case[] = [
-    { message: "Тобі випав дуже рідкий шанс мати участь в 10-ти часовій оргії транссексуалів! Це було неперевершено...", value: 30 },
+    // mega bonus
+    {
+        message:
+            "Тобі випав дуже рідкий шанс мати участь в 10-ти часовій оргії транссексуалів! 😏 Це було неперевершено...",
+        value: 30,
+    },
+    { message: "Тебе згвалтував найліпший друг...", value: 10 },
+    { message: "Що це? Таке приємне відчуття знизу...", value: 16 },
+
+    // mega de-bonus
+    { message: "Ти випадково вронив ножа собі проміж ніг...", value: -40 },
 
     { message: "Ти грав зі своїм пенісом та програв.", value: -2 },
     { message: "Всім тепер відомо як виглядає твій прутень.", value: 4 },
@@ -148,6 +161,10 @@ const regularCases: Case[] = [
     },
 ];
 
-export function getRandomCase(): Case {
-    return regularCases[Math.floor(Math.random() * regularCases.length)];
+class CaseManager {
+    getRandomCase(): Case {
+        return regularCases[Math.floor(Math.random() * regularCases.length)];
+    }
 }
+
+export { Case, CaseManager };

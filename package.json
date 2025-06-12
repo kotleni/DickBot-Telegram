@@ -1,0 +1,28 @@
+{
+    "name": "pisscalbratingbot",
+    "version": "1.0.0",
+    "description": "",
+    "main": "src/index.ts",
+    "scripts": {
+        "dev": "tsx --watch src/index.ts",
+        "lint": "next lint",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "dependencies": {
+        "dotenv": "^16.5.0",
+        "lint": "^0.8.19",
+        "node-telegram-bot-api": "^0.66.0",
+        "prettier": "^3.5.3"
+    },
+    "devDependencies": {
+        "@types/node": "^24.0.1",
+        "@types/node-telegram-bot-api": "^0.64.9",
+        "tsx": "^4.20.2",
+        "typescript": "^5.8.3"
+    }
+}

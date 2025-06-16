@@ -38,7 +38,6 @@ class DicksGame implements Api {
 
             this.commandsManager.processCommandMessage(msg, this);
         });
-        this.bot.onText(/\/cum/, (msg) => this.onCumCommand(msg));
         this.bot.on("callback_query", async (data) => {
             this.commandsManager.processCallback(data, this);
         });
@@ -60,45 +59,6 @@ class DicksGame implements Api {
 
     private onPolingError(error: Error) {
         console.error(error);
-    }
-
-    private onCumCommand(msg: Message) {
-        if (!msg.from) return;
-
-        const userId = msg.from.id.toString();
-
-        const player = this.playersManager.getPlayer(userId);
-        if (player === undefined) {
-            this.replyUnregisteredWarning(msg);
-            return;
-        }
-
-        if (!player.isHaveDick()) {
-            return this.replyTo(msg, "Вибач, але у тебе немає прутня.");
-        }
-
-        player.addScore(3);
-        this.playersManager.save();
-
-        const distance = Math.round(Math.random() * 100);
-        this.replyTo(
-            msg,
-            `Без відомих нікому причин ви кінчили на дистанцію в ${distance} см.`,
-        );
-        if (distance > 89) {
-            const secondPlayer = this.playersManager.getRandomPlayer();
-            const playerFirstName = player.getFirstName();
-            const secondPlayerFirstName = secondPlayer.getFirstName();
-
-            const playerLink = `<a href="tg://user?id=${player.getId()}">${playerFirstName}</a>`;
-            const secondPlayerLink = `<a href="tg://user?id=${secondPlayer.getId()}">${secondPlayerFirstName}</a>`;
-
-            this.bot?.sendMessage(
-                msg.chat.id,
-                `Увага! 😍\nГравець ${playerLink} випадково обкінчав гравця ${secondPlayerLink}.`,
-                { parse_mode: "HTML" },
-            );
-        }
     }
 }
 

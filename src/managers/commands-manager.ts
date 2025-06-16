@@ -9,6 +9,7 @@ import RegisterCommand from "../commands/register-command";
 import DickCommand from "../commands/dick-command";
 import DuelCommand from "../commands/duel-command";
 import FertilizeCommand from "../commands/fertilize-command";
+import CumCommand from "../commands/cum-command";
 
 class CommandsManager {
     private commands: Command[] = [
@@ -20,6 +21,7 @@ class CommandsManager {
         new DickCommand(),
         new DuelCommand(),
         new FertilizeCommand(),
+        new CumCommand(),
     ];
 
     processCommandMessage(msg: Message, dicksGame: DicksGame): void {

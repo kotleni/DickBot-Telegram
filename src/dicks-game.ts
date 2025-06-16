@@ -13,11 +13,14 @@ import {
     renderPlayerProfile,
 } from "./rendering";
 import { createWaifuService, WaifuService } from "./services/WaifuService";
+import { CommandsManager } from "./managers/commands-manager";
+import { Api } from "./api";
 
-class DicksGame {
-    private casesManager = new CaseManager();
-    private playersManager = new PlayersManager();
-    private bot: TelegramBot | undefined;
+class DicksGame implements Api {
+    casesManager = new CaseManager();
+    playersManager = new PlayersManager();
+    commandsManager = new CommandsManager();
+    bot: TelegramBot | undefined;
 
     private waifuService: WaifuService = createWaifuService();
 
@@ -35,6 +38,13 @@ class DicksGame {
         this.playersManager.load();
 
         this.bot.on("polling_error", (err) => this.onPolingError(err));
+        this.bot.onText(/\//, async (msg) => {
+            const me = await this.bot?.getMe();
+            if (msg.reply_to_message?.from?.id.toString() === me?.id.toString())
+                return;
+
+            this.commandsManager.processCommandMessage(msg, this);
+        });
         this.bot.onText(/\/register/, (msg) => this.onRegisterCommand(msg));
         this.bot.onText(/\/dick/, (msg) => this.onDickCommand(msg));
         this.bot.onText(/\/topdicks/, (msg) => this.onTopCommand(msg));
@@ -47,8 +57,8 @@ class DicksGame {
         this.bot.on("callback_query", (data) => this.onCallbackQuery(data));
     }
 
-    private replyTo(msg: Message, text: string) {
-        this.bot?.sendMessage(msg.chat.id, text, {
+    async replyTo(msg: Message, text: string) {
+        return this.bot?.sendMessage(msg.chat.id, text, {
             reply_to_message_id: msg.message_id,
             parse_mode: "HTML",
         });

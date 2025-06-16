@@ -129,10 +129,10 @@ class DicksGame {
         const output = topList
             .map((player, index) => renderPlayerLine(player, index))
             .join("\n");
-        this.replyTo(
-            msg,
-            `🧀 <b>Найкращі дрочери:</b>\n\n<code>${output}</code>`,
-        );
+        let output2 = `🧀 <b>Найкращі дрочери:</b>\n\n<code>${output}</code>`;
+        if (topList.length != topPlayers.length)
+            output2 += `\n<i>Гравців не в таблиці: ${topPlayers.length - topList.length}</i>`;
+        this.replyTo(msg, output2);
     }
 
     private onMeCommand(msg: Message) {

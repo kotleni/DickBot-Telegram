@@ -22,8 +22,6 @@ class DicksGame implements Api {
     commandsManager = new CommandsManager();
     bot: TelegramBot | undefined;
 
-    private waifuService: WaifuService = createWaifuService();
-
     // Cooldown management properties
     private dickCommandCooldowns = new Map<string, number>();
     private readonly dickCommandCooldownDuration = 5 * 60 * 1000; // 5 minutes in ms
@@ -52,7 +50,6 @@ class DicksGame implements Api {
         this.bot.onText(/\/whois/, (msg) => this.onWhoisCommand(msg));
         this.bot.onText(/\/cum/, (msg) => this.onCumCommand(msg));
         this.bot.onText(/\/duel/, (msg) => this.onDuelCommand(msg));
-        this.bot.onText(/\/boobs/, (msg) => this.onBoobsCommand(msg));
         this.bot.onText(/\/fertilize/, (msg) => this.onFertilizeCommand(msg));
         this.bot.on("callback_query", (data) => this.onCallbackQuery(data));
     }
@@ -284,26 +281,6 @@ class DicksGame implements Api {
             reply_to_message_id: msg.message_id,
             parse_mode: "HTML",
             reply_markup: kb,
-        });
-    }
-
-    private async onBoobsCommand(msg: Message) {
-        if (!msg.from) return;
-
-        const category = msg.text?.split(" ")[1] ?? "cuddle";
-        const type = msg.text?.split(" ")[2] ?? "sfw";
-
-        const player = this.playersManager.getPlayer(msg.from.id.toString());
-        if (player === undefined) {
-            this.replyUnregisteredWarning(msg);
-            return;
-        }
-
-        const url = await this.waifuService.getPicture(type, category);
-        this.bot?.sendPhoto(msg.chat.id, url ?? "", {
-            caption: `🤪`,
-            parse_mode: "HTML",
-            has_spoiler: true,
         });
     }
 

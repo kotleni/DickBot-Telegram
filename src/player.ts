@@ -74,9 +74,9 @@ class Player {
         return Math.round(this.data.dickSize);
     }
 
-    getPlayerGender(): string {
+    getPlayerGender(): Gender {
         const resolver = new GenderResolver();
-        return resolver.forPlayer(this).name;
+        return resolver.forPlayer(this);
     }
 
     getUsername(): string {

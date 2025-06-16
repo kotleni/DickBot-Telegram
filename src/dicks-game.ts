@@ -264,7 +264,7 @@ class DicksGame {
         }
 
         const gender = player.getPlayerGender();
-        const isFemboy = gender === "Фембой";
+        const isFemboy = gender.name === "Фембой";
 
         if (isFemboy) {
             this.replyTo(

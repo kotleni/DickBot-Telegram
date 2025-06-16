@@ -12,11 +12,14 @@ import {
     renderPlayerLine,
     renderPlayerProfile,
 } from "./rendering";
+import { createWaifuService, WaifuService } from "./services/WaifuService";
 
 class DicksGame {
     private casesManager = new CaseManager();
     private playersManager = new PlayersManager();
     private bot: TelegramBot | undefined;
+
+    private waifuService: WaifuService = createWaifuService();
 
     // Cooldown management properties
     private dickCommandCooldowns = new Map<string, number>();
@@ -274,8 +277,11 @@ class DicksGame {
         });
     }
 
-    private onBoobsCommand(msg: Message) {
+    private async onBoobsCommand(msg: Message) {
         if (!msg.from) return;
+
+        const category = msg.text?.split(" ")[1] ?? "cuddle";
+        const type = msg.text?.split(" ")[2] ?? "sfw";
 
         const player = this.playersManager.getPlayer(msg.from.id.toString());
         if (player === undefined) {
@@ -283,22 +289,12 @@ class DicksGame {
             return;
         }
 
-        const gender = player.getPlayerGender();
-        const isFemboy = gender.name === "Фембой";
-
-        if (isFemboy) {
-            this.replyTo(
-                msg,
-                "🎯 Сьогодні свято, бо ваш член скоротився на 1 сантиметр!",
-            );
-            player.addDickSize(-1);
-            this.playersManager.save();
-        } else {
-            this.replyTo(
-                msg,
-                "❌ Вибачте, але для виконання цієї команди вам необхідно мати груди.\n\nОдин із способів їх отримати - стати фембоєм.",
-            );
-        }
+        const url = await this.waifuService.getPicture(type, category);
+        this.bot?.sendPhoto(msg.chat.id, url ?? "", {
+            caption: `🤪`,
+            parse_mode: "HTML",
+            has_spoiler: true,
+        });
     }
 
     private onFertilizeCommand(msg: Message) {

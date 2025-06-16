@@ -12,6 +12,23 @@ class CumCommand extends Command {
 
         const player = api.playersManager.getPlayer(userId)!;
 
+        const opponentId = msg.reply_to_message?.from?.id.toString();
+        if (opponentId === undefined) {
+            await api.replyTo(
+                msg,
+                "Відправте цю команду у відповідь на повідомлення.",
+            );
+            return;
+        }
+
+        if (userId === opponentId && player?.getDickSize() < 200) {
+            await api.replyTo(
+                msg,
+                "Вибач, але щоб кінчити на себе треба мати мімнімум 200 см прутня.",
+            );
+            return;
+        }
+
         if (!player.isHaveDick()) {
             await api.replyTo(msg, "Вибач, але у тебе немає прутня.");
             return;
@@ -20,24 +37,39 @@ class CumCommand extends Command {
         player.addScore(3);
         api.playersManager.save();
 
+        const parts = [
+            "лице",
+            "руки",
+            "ноги",
+            "животик",
+            "член",
+            "волосся",
+            "спину",
+            "локті",
+            "телефон",
+            "ноутбук",
+            "ліжко",
+            "стіл",
+            "груди",
+        ];
+
         const distance = Math.round(Math.random() * 100);
-        await api.replyTo(
-            msg,
-            `Без відомих нікому причин ви кінчили на дистанцію в ${distance} см.`,
-        );
-        if (distance > 89) {
-            const secondPlayer = api.playersManager.getRandomPlayer();
+        if (distance > 33) {
+            const secondPlayer = api.playersManager.getPlayer(opponentId)!;
             const playerFirstName = player.getFirstName();
             const secondPlayerFirstName = secondPlayer.getFirstName();
 
             const playerLink = `<a href="tg://user?id=${player.getId()}">${playerFirstName}</a>`;
             const secondPlayerLink = `<a href="tg://user?id=${secondPlayer.getId()}">${secondPlayerFirstName}</a>`;
 
-            api.bot?.sendMessage(
-                msg.chat.id,
-                `Увага! 😍\nГравець ${playerLink} випадково обкінчав гравця ${secondPlayerLink}.`,
-                { parse_mode: "HTML" },
+            const randomPart = parts[Math.floor(Math.random() * parts.length)];
+
+            await api.replyTo(
+                msg,
+                `Жах! 😍\nГравець ${playerLink} обкінчав ${randomPart} гравця ${secondPlayerLink}.`,
             );
+        } else {
+            await api.replyTo(msg, `Мимо... Нікого не заділо...`);
         }
     }
 }

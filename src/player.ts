@@ -4,10 +4,18 @@ interface PlayerData {
     dickSize: number;
     score: number;
     fertilizations: number;
+    cums: number;
 }
 
 function createPlayerData(firstName: string, username: string): PlayerData {
-    return { firstName, username, dickSize: 16, score: 0, fertilizations: 0 };
+    return {
+        firstName,
+        username,
+        dickSize: 16,
+        score: 0,
+        fertilizations: 0,
+        cums: 0,
+    };
 }
 
 function createPlayer(data: PlayerData, tgId: string): Player {
@@ -119,6 +127,15 @@ class Player {
 
     incrementFertilizations(): number {
         return ++this.data.fertilizations;
+    }
+
+    getCums() {
+        if (!this.data.cums) this.data.cums = 0;
+        return this.data.cums;
+    }
+
+    incrementCums(): number {
+        return ++this.data.cums;
     }
 }
 

@@ -89,6 +89,8 @@ class DuelCommand extends Command {
         players.forEach((player) => {
             if (player == winner) player.addDickSize(cost);
             else player.addDickSize(-cost);
+
+            player.incrementCums();
         });
 
         api.playersManager.save();

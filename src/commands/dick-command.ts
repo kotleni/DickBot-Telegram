@@ -38,6 +38,7 @@ class DickCommand extends Command {
         this.dickCommandCooldowns.set(userId, Date.now());
 
         player.addScore(1);
+        player.incrementCums();
 
         const situationCase = api.casesManager.getRandomCase();
         player.addDickSize(situationCase.value);

@@ -35,6 +35,7 @@ class CumCommand extends Command {
         }
 
         player.addScore(3);
+        player.incrementCums();
         api.playersManager.save();
 
         const parts = [

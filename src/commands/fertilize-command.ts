@@ -33,6 +33,7 @@ class FertilizeCommand extends Command {
         }
 
         player.addScore(18);
+        player.incrementCums();
         opponent?.addScore(1);
 
         player.addDickSize(cost);

@@ -42,7 +42,6 @@ class DicksGame implements Api {
 
             this.commandsManager.processCommandMessage(msg, this);
         });
-        this.bot.onText(/\/register/, (msg) => this.onRegisterCommand(msg));
         this.bot.onText(/\/dick/, (msg) => this.onDickCommand(msg));
         this.bot.onText(/\/cum/, (msg) => this.onCumCommand(msg));
         this.bot.onText(/\/duel/, (msg) => this.onDuelCommand(msg));
@@ -66,26 +65,6 @@ class DicksGame implements Api {
 
     private onPolingError(error: Error) {
         console.error(error);
-    }
-
-    private onRegisterCommand(msg: Message) {
-        if (!msg.from) return;
-
-        const userId = msg.from.id.toString();
-        const player = this.playersManager.getPlayer(userId);
-        if (player) return this.replyTo(msg, "Ви уже зареєстровані.");
-
-        const userName = msg.from.username ?? msg.from.id.toString();
-        const firstName = msg.from.first_name;
-        const newPlayer = this.playersManager.createPlayer(
-            userId,
-            userName,
-            firstName,
-        );
-        this.replyTo(
-            msg,
-            `Ви зареєстровані, ${newPlayer.getFirstName()}!\n 😏 /dick - щоб грати.`,
-        );
     }
 
     private onDickCommand(msg: Message) {

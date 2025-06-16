@@ -5,6 +5,7 @@ import { DicksGame } from "../dicks-game";
 import BoobsCommand from "../commands/boobs-command";
 import { TopDicksCommand } from "../commands/topdicks-command";
 import WhoisCommand from "../commands/whois-command";
+import RegisterCommand from "../commands/register-command";
 
 class CommandsManager {
     private commands: Command[] = [
@@ -12,6 +13,7 @@ class CommandsManager {
         new BoobsCommand(),
         new TopDicksCommand(),
         new WhoisCommand(),
+        new RegisterCommand(),
     ];
 
     processCommandMessage(msg: Message, dicksGame: DicksGame): void {

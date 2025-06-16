@@ -39,6 +39,7 @@ class DicksGame {
         this.bot.onText(/\/cum/, (msg) => this.onCumCommand(msg));
         this.bot.onText(/\/duel/, (msg) => this.onDuelCommand(msg));
         this.bot.onText(/\/boobs/, (msg) => this.onBoobsCommand(msg));
+        this.bot.onText(/\/fertilize/, (msg) => this.onFertilizeCommand(msg));
         this.bot.on("callback_query", (data) => this.onCallbackQuery(data));
     }
 
@@ -278,6 +279,48 @@ class DicksGame {
                 "❌ Вибачте, але для виконання цієї команди вам необхідно мати груди.\n\nОдин із способів їх отримати - стати фембоєм.",
             );
         }
+    }
+
+    private onFertilizeCommand(msg: Message) {
+        if (!msg.from) return;
+
+        const player = this.playersManager.getPlayer(msg.from.id.toString());
+        if (player === undefined) {
+            this.replyUnregisteredWarning(msg);
+            return;
+        }
+
+        const opponentId = msg.reply_to_message?.from?.id.toString();
+
+        if (opponentId === undefined) {
+            return this.replyTo(
+                msg,
+                "Відправте /fertilize у відповідь на повідомлення.",
+            );
+        }
+
+        const opponent = this.playersManager.getPlayer(opponentId!!);
+        const requirement = 90;
+        const cost = 1;
+
+        if (player.getDickSize() < requirement) {
+            return this.replyTo(
+                msg,
+                `Для того щоб запліднити когось - вам треба мати як мінімум ${requirement} см.`,
+            );
+        }
+
+        player.addScore(18);
+        opponent?.addScore(1);
+
+        player.addDickSize(cost);
+        opponent?.addDickSize(cost);
+        this.playersManager.save();
+
+        this.replyTo(
+            msg,
+            `🧬 Ви запліднили гравця ${opponent?.getFirstName()}!\n+1 см для обох прутнів...`,
+        );
     }
 
     private onCallbackQuery(data: CallbackQuery) {

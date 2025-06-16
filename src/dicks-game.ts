@@ -36,6 +36,7 @@ class DicksGame {
         this.bot.onText(/\/dick/, (msg) => this.onDickCommand(msg));
         this.bot.onText(/\/topdicks/, (msg) => this.onTopCommand(msg));
         this.bot.onText(/\/me/, (msg) => this.onMeCommand(msg));
+        this.bot.onText(/\/whois/, (msg) => this.onWhoisCommand(msg));
         this.bot.onText(/\/cum/, (msg) => this.onCumCommand(msg));
         this.bot.onText(/\/duel/, (msg) => this.onDuelCommand(msg));
         this.bot.onText(/\/boobs/, (msg) => this.onBoobsCommand(msg));
@@ -149,6 +150,25 @@ class DicksGame {
         if (!msg.from) return;
 
         const userId = msg.from.id.toString();
+
+        const player = this.playersManager.getPlayer(userId);
+        if (player === undefined) {
+            this.replyUnregisteredWarning(msg);
+            return;
+        }
+        const output = renderPlayerProfile(player!!);
+        this.replyTo(msg, output);
+    }
+
+    private onWhoisCommand(msg: Message) {
+        if (!msg.from) return;
+
+        const userId = msg.reply_to_message?.from?.id.toString();
+        if (userId === undefined)
+            return this.replyTo(
+                msg,
+                "Відправте /whois у відповідь на повідомлення.",
+            );
 
         const player = this.playersManager.getPlayer(userId);
         if (player === undefined) {

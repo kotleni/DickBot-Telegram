@@ -15,10 +15,12 @@ function createPlayer(data: PlayerData, tgId: string): Player {
 
 interface Gender {
     name: string;
+    currentRule: GenderRule;
+    nextRule: GenderRule;
 }
 
 interface GenderRule {
-    gender: Gender;
+    name: string;
     minSize: number;
     maxSize: number;
 }
@@ -26,19 +28,19 @@ interface GenderRule {
 class GenderResolver {
     private rules: GenderRule[] = [
         // Rules should be sorted by minSize
-        { gender: { name: "Дівчина" }, minSize: 0, maxSize: 0 },
-        { gender: { name: "Фембой" }, minSize: 1, maxSize: 10 },
-        { gender: { name: "Хлопець" }, minSize: 10, maxSize: 44 },
-        { gender: { name: "Мастурбатор" }, minSize: 44, maxSize: 70 },
-        { gender: { name: "Чоловік" }, minSize: 70, maxSize: 100 },
-        { gender: { name: "Анальний дебошир" }, minSize: 100, maxSize: 200 },
-        { gender: { name: "Секс-монстер" }, minSize: 200, maxSize: 300 },
-        { gender: { name: "Насильник" }, minSize: 300, maxSize: 400 },
-        { gender: { name: "БДСМ-Катувальник" }, minSize: 400, maxSize: 666 },
-        { gender: { name: "HOMELANDER" }, minSize: 666, maxSize: 1000 },
-        { gender: { name: "Сукуб-осіменитель" }, minSize: 1000, maxSize: 3000 },
+        { name: "Дівчина", minSize: 0, maxSize: 0 },
+        { name: "Фембой", minSize: 1, maxSize: 10 },
+        { name: "Хлопець", minSize: 10, maxSize: 44 },
+        { name: "Мастурбатор", minSize: 44, maxSize: 70 },
+        { name: "Чоловік", minSize: 70, maxSize: 100 },
+        { name: "Анальний дебошир", minSize: 100, maxSize: 200 },
+        { name: "Секс-монстер", minSize: 200, maxSize: 300 },
+        { name: "Насильник", minSize: 300, maxSize: 400 },
+        { name: "БДСМ-Катувальник", minSize: 400, maxSize: 666 },
+        { name: "HOMELANDER", minSize: 666, maxSize: 1000 },
+        { name: "Сукуб-осіменитель", minSize: 1000, maxSize: 3000 },
         {
-            gender: { name: "Бог сексу" },
+            name: "Бог сексу",
             minSize: 3000,
             maxSize: 9999999999999999,
         },
@@ -46,9 +48,13 @@ class GenderResolver {
 
     forPlayer(player: Player): Gender {
         const dickSize = player.getDickSize();
-        return this.rules.find((rule) => {
+        const rule = this.rules.find((rule) => {
             return dickSize >= rule.minSize && dickSize <= rule.maxSize;
-        })?.gender!!;
+        })!!;
+        const index = this.rules.indexOf(rule);
+        const nextIndex = index + 1;
+        const nextRule = this.rules[nextIndex];
+        return { name: rule.name, currentRule: rule, nextRule: nextRule };
     }
 }
 

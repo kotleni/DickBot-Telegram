@@ -1,12 +1,47 @@
 import { Player } from "./player";
 import { Case } from "./managers/cases-manager";
 
+function renderProgressBar(
+    current: number,
+    start: number,
+    end: number,
+    length: number = 10,
+): string {
+    if (end <= start) {
+        return `[${"█".repeat(length)}] 100%`;
+    }
+
+    const progress = Math.max(0, current - start);
+    const total = end - start;
+    const percentage = Math.min(1, progress / total);
+
+    const filledCount = Math.round(percentage * length);
+    const emptyCount = length - filledCount;
+
+    const filledChars = "█".repeat(filledCount);
+    const emptyChars = "▒".repeat(emptyCount);
+
+    return `[${filledChars}${emptyChars}] ${Math.round(percentage * 100)}%`;
+}
+
 function renderPlayerProfile(player: Player): string {
+    const gender = player.getPlayerGender();
+    const dickSize = player.getDickSize();
+
+    const rangProgressBar = renderProgressBar(
+        dickSize,
+        gender.currentRule.minSize,
+        gender.nextRule.minSize,
+    );
+
     let buffer = `Гравець ${player.getFirstName()}`;
-    buffer += `\n🎯 Ранг: ${player.getPlayerGender().name}`;
-    buffer += `\n⭐️ XP: ${player.getScore()}`;
+    buffer += `\n🎯 Ранг: ${gender.name}`;
+    buffer += `\n (Наступний: ${gender.nextRule.name}, треба ще ${gender.nextRule.minSize - player.getDickSize()} см)`;
+    buffer += "\n" + rangProgressBar;
+    buffer += "\n";
     if (player.isHaveDick()) buffer += `\n🍆 Пеніс: ${player.getDickSize()} см`;
     else buffer += `\n🍆 Немає пенісу. (Відновити: /dick)`;
+    buffer += `\n⭐️ XP: ${player.getScore()}`;
     buffer += `\n\nОстанній відома юзерка: @${player.getUsername()}`;
     return buffer;
 }

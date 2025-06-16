@@ -38,6 +38,7 @@ class DicksGame {
         this.bot.onText(/\/me/, (msg) => this.onMeCommand(msg));
         this.bot.onText(/\/cum/, (msg) => this.onCumCommand(msg));
         this.bot.onText(/\/duel/, (msg) => this.onDuelCommand(msg));
+        this.bot.onText(/\/boobs/, (msg) => this.onBoobsCommand(msg));
         this.bot.on("callback_query", (data) => this.onCallbackQuery(data));
     }
 
@@ -210,11 +211,11 @@ class DicksGame {
         const initiatorId = msg.from.id.toString();
         const opponentId = msg.reply_to_message.from?.id.toString();
 
-        if(initiatorId === opponentId)
+        if (initiatorId === opponentId)
             return this.replyTo(
                 msg,
                 "Ви не можете визвати самого себе на дуєль.",
-            )
+            );
 
         const initiator = this.playersManager.getPlayer(initiatorId);
         const opponent = this.playersManager.getPlayer(opponentId);
@@ -250,6 +251,33 @@ class DicksGame {
             parse_mode: "HTML",
             reply_markup: kb,
         });
+    }
+
+    private onBoobsCommand(msg: Message) {
+        if (!msg.from) return;
+
+        const player = this.playersManager.getPlayer(msg.from.id.toString());
+        if (player === undefined) {
+            this.replyUnregisteredWarning(msg);
+            return;
+        }
+
+        const gender = player.getPlayerGender();
+        const isFemboy = gender === "Фембой";
+
+        if (isFemboy) {
+            this.replyTo(
+                msg,
+                "🎯 Сьогодні свято, бо ваш член скоротився на 1 сантиметр!",
+            );
+            player.addDickSize(-1);
+            this.playersManager.save();
+        } else {
+            this.replyTo(
+                msg,
+                "❌ Вибачте, але для виконання цієї команди вам необхідно мати груди.\n\nОдин із способів їх отримати - стати фембоєм.",
+            );
+        }
     }
 
     private onCallbackQuery(data: CallbackQuery) {

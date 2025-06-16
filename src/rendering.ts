@@ -42,6 +42,7 @@ function renderPlayerProfile(player: Player): string {
     if (player.isHaveDick()) buffer += `\n🍆 Пеніс: ${player.getDickSize()} см`;
     else buffer += `\n🍆 Немає пенісу. (Відновити: /dick)`;
     buffer += `\n⭐️ XP: ${player.getScore()}`;
+    buffer += `\n🧬️ Відтраханий разів: ${player.getFertilizations()}`;
     // buffer += `\n\nОстанній відома юзерка: @${player.getUsername()}`;
     return buffer;
 }

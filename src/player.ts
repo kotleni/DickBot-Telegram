@@ -3,10 +3,11 @@ interface PlayerData {
     username: string;
     dickSize: number;
     score: number;
+    fertilizations: number;
 }
 
 function createPlayerData(firstName: string, username: string): PlayerData {
-    return { firstName, username, dickSize: 16, score: 0 };
+    return { firstName, username, dickSize: 16, score: 0, fertilizations: 0 };
 }
 
 function createPlayer(data: PlayerData, tgId: string): Player {
@@ -109,6 +110,15 @@ class Player {
 
     getId() {
         return this.tgId;
+    }
+
+    getFertilizations() {
+        if (!this.data.fertilizations) this.data.fertilizations = 0;
+        return this.data.fertilizations;
+    }
+
+    incrementFertilizations(): number {
+        return ++this.data.fertilizations;
     }
 }
 

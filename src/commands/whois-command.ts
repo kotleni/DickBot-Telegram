@@ -13,6 +13,8 @@ class WhoisCommand extends Command {
             msg.from?.id.toString())!!;
 
         const player = api.playersManager.getPlayer(userId);
+        if (player === undefined) return;
+
         const output = renderPlayerProfile(player!!);
         await api.replyTo(msg, output);
     }

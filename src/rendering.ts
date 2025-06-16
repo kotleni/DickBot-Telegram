@@ -95,7 +95,8 @@ function renderDuelEndResult(
     allPlayers.forEach((player) => {
         if (winner === player) firstPart += "\n+ ";
         else firstPart += "\n- ";
-        firstPart += cost.toString() + ` см для ${player.getUsername()}`;
+        // TODO: Make clickable name for user
+        firstPart += cost.toString() + ` см для ${player.getFirstName()}`;
     });
     return firstPart;
 }

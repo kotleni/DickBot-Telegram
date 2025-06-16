@@ -1,12 +1,13 @@
 import { PatCommand } from "../commands/pat-command";
 import { Command } from "../commands/command";
-import { Message } from "node-telegram-bot-api";
+import { CallbackQuery, Message } from "node-telegram-bot-api";
 import { DicksGame } from "../dicks-game";
 import BoobsCommand from "../commands/boobs-command";
 import { TopDicksCommand } from "../commands/topdicks-command";
 import WhoisCommand from "../commands/whois-command";
 import RegisterCommand from "../commands/register-command";
 import DickCommand from "../commands/dick-command";
+import DuelCommand from "../commands/duel-command";
 
 class CommandsManager {
     private commands: Command[] = [
@@ -16,6 +17,7 @@ class CommandsManager {
         new WhoisCommand(),
         new RegisterCommand(),
         new DickCommand(),
+        new DuelCommand(),
     ];
 
     processCommandMessage(msg: Message, dicksGame: DicksGame): void {
@@ -27,6 +29,13 @@ class CommandsManager {
                     dicksGame,
                 );
             }
+        });
+    }
+
+    processCallback(query: CallbackQuery, dicksGame: DicksGame): void {
+        this.commands.forEach((command) => {
+            // TODO: Filter commands
+            command.processCallback(query, dicksGame);
         });
     }
 }

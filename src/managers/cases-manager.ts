@@ -939,8 +939,14 @@ const regularCases: Case[] = [
 ];
 
 class CaseManager {
+    private currentIndex: number = Math.floor(
+        Math.random() * regularCases.length,
+    );
+
     getRandomCase(): Case {
-        return regularCases[Math.floor(Math.random() * regularCases.length)];
+        this.currentIndex += 1;
+        if (this.currentIndex >= regularCases.length) this.currentIndex = 0;
+        return regularCases[this.currentIndex];
     }
 }
 

@@ -210,6 +210,12 @@ class DicksGame {
         const initiatorId = msg.from.id.toString();
         const opponentId = msg.reply_to_message.from?.id.toString();
 
+        if(initiatorId === opponentId)
+            return this.replyTo(
+                msg,
+                "Ви не можете визвати самого себе на дуєль.",
+            )
+
         const initiator = this.playersManager.getPlayer(initiatorId);
         const opponent = this.playersManager.getPlayer(opponentId);
 

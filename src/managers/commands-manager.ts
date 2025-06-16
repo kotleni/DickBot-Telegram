@@ -3,9 +3,14 @@ import { Command } from "../commands/command";
 import { Message } from "node-telegram-bot-api";
 import { DicksGame } from "../dicks-game";
 import BoobsCommand from "../commands/boobs-command";
+import { TopDicksCommand } from "../commands/topdicks-command";
 
 class CommandsManager {
-    private commands: Command[] = [new PatCommand(), new BoobsCommand()];
+    private commands: Command[] = [
+        new PatCommand(),
+        new BoobsCommand(),
+        new TopDicksCommand(),
+    ];
 
     processCommandMessage(msg: Message, dicksGame: DicksGame): void {
         this.commands.forEach((command) => {

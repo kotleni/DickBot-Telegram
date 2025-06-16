@@ -45,7 +45,6 @@ class DicksGame implements Api {
         });
         this.bot.onText(/\/register/, (msg) => this.onRegisterCommand(msg));
         this.bot.onText(/\/dick/, (msg) => this.onDickCommand(msg));
-        this.bot.onText(/\/topdicks/, (msg) => this.onTopCommand(msg));
         this.bot.onText(/\/me/, (msg) => this.onMeCommand(msg));
         this.bot.onText(/\/whois/, (msg) => this.onWhoisCommand(msg));
         this.bot.onText(/\/cum/, (msg) => this.onCumCommand(msg));
@@ -131,29 +130,6 @@ class DicksGame implements Api {
 
         const output = renderCaseResult(situationCase, player);
         this.replyTo(msg, output);
-    }
-
-    private onTopCommand(msg: Message) {
-        if (!msg.from) return;
-
-        const allPlayers = this.playersManager.getAllPlayers();
-        const topPlayers = allPlayers.sort(
-            (a, b) => b.getDickSize() - a.getDickSize(),
-        );
-        if (topPlayers.length === 0)
-            return this.replyTo(
-                msg,
-                "Не достатньо гравців, щоб знайти актива.",
-            );
-
-        const topList = topPlayers.slice(0, 10);
-        const output = topList
-            .map((player, index) => renderPlayerLine(player, index))
-            .join("\n");
-        let output2 = `🧀 <b>Найкращі дрочери:</b>\n\n<code>${output}</code>`;
-        if (topList.length != topPlayers.length)
-            output2 += `\n<i>Гравців не в таблиці: ${topPlayers.length - topList.length}</i>`;
-        this.replyTo(msg, output2);
     }
 
     private onMeCommand(msg: Message) {

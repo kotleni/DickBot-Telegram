@@ -22,7 +22,28 @@ function renderCaseResult(situationCase: Case, player: Player): string {
 }
 
 function renderPlayerLine(player: Player, place: number): string {
-    return `${place + 1}. ${player.getFirstName()} ${player.getDickSize()} см`;
+    function stripOrExpandName(name: string): string {
+        const requireLength = 10;
+        if (name.length > requireLength) {
+            return `${name.slice(0, requireLength)}`;
+        }
+        return name.padEnd(requireLength, " ");
+    }
+    function simplifyName(name: string, fallbackName: string): string {
+        const resultName = name.replace(/[^a-zA-Zа-яА-Я]/g, "");
+        if (resultName.length > 0) return resultName;
+        return fallbackName;
+    }
+    function expandValue(value: number, requireLength: number): string {
+        const line = value.toString();
+        return line.padStart(requireLength, " ");
+    }
+    const name = stripOrExpandName(
+        simplifyName(player.getFirstName(), player.getUsername()),
+    );
+    const dickSize = expandValue(player.getDickSize(), 3);
+    const score = expandValue(player.getScore(), 5);
+    return `${place + 1}. ${name} ${dickSize} см (${score} XP)`;
 }
 
 export { renderPlayerProfile, renderCaseResult, renderPlayerLine };

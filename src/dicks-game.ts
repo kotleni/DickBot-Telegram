@@ -315,6 +315,7 @@ class DicksGame {
 
         player.addDickSize(cost);
         opponent?.addDickSize(cost);
+        opponent?.incrementFertilizations();
         this.playersManager.save();
 
         this.replyTo(

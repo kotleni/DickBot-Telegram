@@ -46,4 +46,28 @@ function renderPlayerLine(player: Player, place: number): string {
     return `${place + 1}. ${name} ${dickSize} см (${score} XP)`;
 }
 
-export { renderPlayerProfile, renderCaseResult, renderPlayerLine };
+function renderDuelStartResult(player1: Player, player2: Player): string {
+    return `⚠️ Гравець ${player1.getFirstName()} визвав гравця ${player2.getFirstName()} на дуель!`;
+}
+
+function renderDuelEndResult(
+    winner: Player,
+    allPlayers: Player[],
+    cost: number,
+): string {
+    let firstPart = `🎉 Гравець ${winner.getFirstName()} переміг, бо довше не кінчав!`;
+    allPlayers.forEach((player) => {
+        if (winner === player) firstPart += "\n+ ";
+        else firstPart += "\n- ";
+        firstPart += cost.toString() + ` см для ${player.getUsername()}`;
+    });
+    return firstPart;
+}
+
+export {
+    renderPlayerProfile,
+    renderCaseResult,
+    renderPlayerLine,
+    renderDuelStartResult,
+    renderDuelEndResult,
+};

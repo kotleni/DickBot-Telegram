@@ -1,8 +1,14 @@
 import { CaseManager } from "./managers/cases-manager";
 import { PlayersManager } from "./managers/players-manager";
-import TelegramBot, { Message } from "node-telegram-bot-api";
+import TelegramBot, {
+    CallbackQuery,
+    InlineKeyboardMarkup,
+    Message,
+} from "node-telegram-bot-api";
 import {
     renderCaseResult,
+    renderDuelEndResult,
+    renderDuelStartResult,
     renderPlayerLine,
     renderPlayerProfile,
 } from "./rendering";
@@ -31,6 +37,8 @@ class DicksGame {
         this.bot.onText(/\/topdicks/, (msg) => this.onTopCommand(msg));
         this.bot.onText(/\/me/, (msg) => this.onMeCommand(msg));
         this.bot.onText(/\/cum/, (msg) => this.onCumCommand(msg));
+        this.bot.onText(/\/duel/, (msg) => this.onDuelCommand(msg));
+        this.bot.on("callback_query", (data) => this.onCallbackQuery(data));
     }
 
     private replyTo(msg: Message, text: string) {
@@ -186,6 +194,94 @@ class DicksGame {
                 { parse_mode: "HTML" },
             );
         }
+    }
+
+    private onDuelCommand(msg: Message) {
+        if (!msg.from) return;
+
+        if (!msg.reply_to_message?.from) {
+            this.replyTo(
+                msg,
+                "Для того щоб визвати когось на дуєль - відправте /duel у відповідь на повідомлення його.",
+            );
+            return;
+        }
+
+        const initiatorId = msg.from.id.toString();
+        const opponentId = msg.reply_to_message.from?.id.toString();
+
+        const initiator = this.playersManager.getPlayer(initiatorId);
+        const opponent = this.playersManager.getPlayer(opponentId);
+
+        if (initiator === undefined) {
+            this.replyUnregisteredWarning(msg);
+            return;
+        }
+
+        if (opponent === undefined) {
+            this.replyTo(
+                msg,
+                "Опонент не зареєстрований в системі.\n/register для реєстрації.",
+            );
+            return;
+        }
+
+        const resultMessage = renderDuelStartResult(initiator!!, opponent!!);
+
+        const kb: InlineKeyboardMarkup = {
+            inline_keyboard: [
+                [
+                    {
+                        text: `🤝 ${opponent!!.getFirstName()}`,
+                        callback_data: `duel ${initiator!!.getId()} ${opponent!!.getId()}`,
+                    },
+                ],
+            ],
+        };
+
+        this.bot?.sendMessage(msg.chat.id, resultMessage, {
+            reply_to_message_id: msg.message_id,
+            parse_mode: "HTML",
+            reply_markup: kb,
+        });
+    }
+
+    private onCallbackQuery(data: CallbackQuery) {
+        const callback_data = data.data;
+        const parts = callback_data!!.split(" ");
+        if (parts[0] !== "duel") return;
+
+        const initiatorId = parts[1];
+        const opponentId = parts[2];
+
+        if (data.from.id.toString() !== opponentId) return;
+
+        const players = [
+            this.playersManager.getPlayer(initiatorId)!!,
+            this.playersManager.getPlayer(opponentId)!!,
+        ];
+        const winnerIndex = Math.random() * players.length;
+        const winner = players[Math.floor(winnerIndex)];
+
+        const cost = Math.round(Math.random() * 50);
+
+        players.forEach((player) => player.addScore(33));
+
+        players.forEach((player) => {
+            if (player == winner) player.addDickSize(cost);
+            else player.addDickSize(-cost);
+        });
+
+        this.playersManager.save();
+
+        const output = renderDuelEndResult(winner!!, players, cost);
+        this.bot?.editMessageText(output, {
+            chat_id: data.message?.chat.id,
+            message_id: data.message?.message_id,
+            parse_mode: "HTML",
+        });
+
+        this.replyTo(data.message!!, "🤝 Дуєль завершена.");
     }
 }
 

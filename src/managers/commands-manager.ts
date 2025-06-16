@@ -11,6 +11,7 @@ import DuelCommand from "../commands/duel-command";
 import FertilizeCommand from "../commands/fertilize-command";
 import CumCommand from "../commands/cum-command";
 import HelpCommand from "../commands/help-command";
+import MasturbateCommand from "../commands/masturbate-command";
 
 class CommandsManager {
     private commands: Command[] = [
@@ -24,6 +25,7 @@ class CommandsManager {
         new DuelCommand(),
         new FertilizeCommand(),
         new CumCommand(),
+        new MasturbateCommand(),
     ];
 
     getAvailableCommands(): Command[] {

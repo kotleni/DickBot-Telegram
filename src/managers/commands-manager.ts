@@ -10,9 +10,11 @@ import DickCommand from "../commands/dick-command";
 import DuelCommand from "../commands/duel-command";
 import FertilizeCommand from "../commands/fertilize-command";
 import CumCommand from "../commands/cum-command";
+import HelpCommand from "../commands/help-command";
 
 class CommandsManager {
     private commands: Command[] = [
+        new HelpCommand(),
         new PatCommand(),
         new BoobsCommand(),
         new TopDicksCommand(),
@@ -23,6 +25,10 @@ class CommandsManager {
         new FertilizeCommand(),
         new CumCommand(),
     ];
+
+    getAvailableCommands(): Command[] {
+        return this.commands;
+    }
 
     processCommandMessage(msg: Message, dicksGame: DicksGame): void {
         this.commands.forEach((command) => {

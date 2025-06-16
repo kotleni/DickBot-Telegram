@@ -39,7 +39,6 @@ class DicksGame implements Api {
             this.commandsManager.processCommandMessage(msg, this);
         });
         this.bot.onText(/\/cum/, (msg) => this.onCumCommand(msg));
-        this.bot.onText(/\/fertilize/, (msg) => this.onFertilizeCommand(msg));
         this.bot.on("callback_query", async (data) => {
             this.commandsManager.processCallback(data, this);
         });
@@ -100,49 +99,6 @@ class DicksGame implements Api {
                 { parse_mode: "HTML" },
             );
         }
-    }
-
-    private onFertilizeCommand(msg: Message) {
-        if (!msg.from) return;
-
-        const player = this.playersManager.getPlayer(msg.from.id.toString());
-        if (player === undefined) {
-            this.replyUnregisteredWarning(msg);
-            return;
-        }
-
-        const opponentId = msg.reply_to_message?.from?.id.toString();
-
-        if (opponentId === undefined) {
-            return this.replyTo(
-                msg,
-                "Відправте /fertilize у відповідь на повідомлення.",
-            );
-        }
-
-        const opponent = this.playersManager.getPlayer(opponentId!!);
-        const requirement = 90;
-        const cost = 1;
-
-        if (player.getDickSize() < requirement) {
-            return this.replyTo(
-                msg,
-                `Для того щоб запліднити когось - вам треба мати як мінімум ${requirement} см.`,
-            );
-        }
-
-        player.addScore(18);
-        opponent?.addScore(1);
-
-        player.addDickSize(cost);
-        opponent?.addDickSize(cost);
-        opponent?.incrementFertilizations();
-        this.playersManager.save();
-
-        this.replyTo(
-            msg,
-            `🧬 Ви запліднили гравця ${opponent?.getFirstName()}!\n+1 см для обох прутнів...`,
-        );
     }
 }
 

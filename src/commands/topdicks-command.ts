@@ -25,7 +25,22 @@ class TopDicksCommand extends Command {
         let output2 = `🧀 <b>Найкращі дрочери:</b>\n\n<code>${output}</code>`;
         if (topList.length != topPlayers.length)
             output2 += `\n<i>Гравців не в таблиці: ${topPlayers.length - topList.length}</i>`;
-        api.replyTo(msg, output2);
+
+        const bestFertilizer = topPlayers.reduce((prev, curr) => {
+            return prev.getFertilizations() > curr.getFertilizations()
+                ? prev
+                : curr;
+        });
+        const bestCummer = topPlayers.reduce((prev, curr) => {
+            return prev.getCums() > curr.getCums() ? prev : curr;
+        });
+
+        const bestFertilizerLink = `<a href="tg://user?id=${bestFertilizer.getId()}">${bestFertilizer.getFirstName()}</a>`;
+        const bestCummerLink = `<a href="tg://user?id=${bestCummer.getId()}">${bestCummer.getFirstName()}</a>`;
+
+        output2 += `\n\nЧастіше всього кінчає - ${bestCummerLink}`;
+        output2 += `\nЧастіше всього трахають - ${bestFertilizerLink}`;
+        await api.replyTo(msg, output2);
     }
 }
 

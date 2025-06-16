@@ -21,10 +21,6 @@ class DicksGame implements Api {
     commandsManager = new CommandsManager();
     bot: TelegramBot | undefined;
 
-    // Cooldown management properties
-    private dickCommandCooldowns = new Map<string, number>();
-    private readonly dickCommandCooldownDuration = 5 * 60 * 1000; // 5 minutes in ms
-
     start() {
         require("dotenv").config();
         const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -42,7 +38,6 @@ class DicksGame implements Api {
 
             this.commandsManager.processCommandMessage(msg, this);
         });
-        this.bot.onText(/\/dick/, (msg) => this.onDickCommand(msg));
         this.bot.onText(/\/cum/, (msg) => this.onCumCommand(msg));
         this.bot.onText(/\/duel/, (msg) => this.onDuelCommand(msg));
         this.bot.onText(/\/fertilize/, (msg) => this.onFertilizeCommand(msg));
@@ -65,47 +60,6 @@ class DicksGame implements Api {
 
     private onPolingError(error: Error) {
         console.error(error);
-    }
-
-    private onDickCommand(msg: Message) {
-        if (!msg.from) return;
-
-        const userId = msg.from.id.toString();
-
-        const player = this.playersManager.getPlayer(userId);
-        if (player === undefined) {
-            this.replyUnregisteredWarning(msg);
-            return;
-        }
-
-        // Cooldown
-        const lastUsedTimestamp = this.dickCommandCooldowns.get(userId);
-        if (lastUsedTimestamp) {
-            const timeElapsed = Date.now() - lastUsedTimestamp;
-
-            if (timeElapsed < this.dickCommandCooldownDuration) {
-                const timeLeftMs =
-                    this.dickCommandCooldownDuration - timeElapsed;
-                const timeLeftSec = Math.ceil(timeLeftMs / 1000);
-                this.replyTo(
-                    msg,
-                    `Терпіння, юний друже. Ви зможете чіпати прутня знову через <b>${timeLeftSec}</b> секунд.`,
-                );
-                return;
-            }
-        }
-
-        // Update cooldown
-        this.dickCommandCooldowns.set(userId, Date.now());
-
-        player.addScore(1);
-
-        const situationCase = this.casesManager.getRandomCase();
-        player.addDickSize(situationCase.value);
-        this.playersManager.save();
-
-        const output = renderCaseResult(situationCase, player);
-        this.replyTo(msg, output);
     }
 
     private onCumCommand(msg: Message) {

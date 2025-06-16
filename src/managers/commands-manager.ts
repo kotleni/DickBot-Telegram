@@ -4,12 +4,14 @@ import { Message } from "node-telegram-bot-api";
 import { DicksGame } from "../dicks-game";
 import BoobsCommand from "../commands/boobs-command";
 import { TopDicksCommand } from "../commands/topdicks-command";
+import WhoisCommand from "../commands/whois-command";
 
 class CommandsManager {
     private commands: Command[] = [
         new PatCommand(),
         new BoobsCommand(),
         new TopDicksCommand(),
+        new WhoisCommand(),
     ];
 
     processCommandMessage(msg: Message, dicksGame: DicksGame): void {

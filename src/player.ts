@@ -27,12 +27,12 @@ class Player {
     }
 
     getScore(): number {
-        return this.data.score;
+        return Math.round(this.data.score);
     }
 
     getDickSize(): number {
         if (this.data.dickSize < 0) this.data.dickSize = 0;
-        return this.data.dickSize;
+        return Math.round(this.data.dickSize);
     }
 
     getPlayerGender(): string {

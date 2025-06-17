@@ -1,7 +1,7 @@
 import { Command } from "./command";
 import TelegramBot from "node-telegram-bot-api";
 import { Api } from "../api";
-import { getItemById } from "../items";
+import { CatEars, getItemById } from "../items";
 
 class InvCommand extends Command {
     name = "inv";
@@ -14,6 +14,16 @@ class InvCommand extends Command {
 
         if (inventory.length === 0) {
             await api.replyTo(msg, "Ваш інвентар порожній.");
+
+            const item = CatEars;
+            await api.replyTo(
+                msg,
+                `Гравець ${player.getFirstName()} отримав ${item.name} 1 шт.`,
+            );
+
+            player.addItem(item);
+            api.playersManager.save();
+
             return;
         }
 

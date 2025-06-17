@@ -1,6 +1,7 @@
 import { Command } from "./command";
 import TelegramBot from "node-telegram-bot-api";
 import { Api } from "../api";
+import { getItemById } from "../items";
 
 class InvCommand extends Command {
     name = "inv";
@@ -18,8 +19,10 @@ class InvCommand extends Command {
 
         let output = "🖼 Ваш інвентар:\n\n";
 
-        inventory.forEach((item) => {
-            output += `${item.id} ${item.amount} шт\n`;
+        inventory.forEach((inventoryItem) => {
+            const item = getItemById(inventoryItem.id);
+            if (!item) return;
+            output += `${item.name} ${inventoryItem.amount} шт\n`;
         });
 
         await api.replyTo(msg, output);

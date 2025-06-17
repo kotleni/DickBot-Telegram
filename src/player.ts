@@ -1,3 +1,5 @@
+import { Item } from "./items";
+
 interface PlayerData {
     firstName: string;
     username: string;
@@ -5,7 +7,7 @@ interface PlayerData {
     score: number;
     fertilizations: number;
     cums: number;
-    items: Item[];
+    items: InventoryItem[];
 }
 
 function createPlayerData(firstName: string, username: string): PlayerData {
@@ -36,7 +38,7 @@ interface GenderRule {
     maxSize: number;
 }
 
-interface Item {
+interface InventoryItem {
     id: string;
     amount: number;
 }
@@ -145,18 +147,18 @@ class Player {
         return ++this.data.cums;
     }
 
-    getItems(): Item[] {
+    getItems(): InventoryItem[] {
         if (this.data.items === undefined) this.data.items = [];
         return this.data.items;
     }
 
-    addItem(item: Item): void {
+    addItem(item: Item, amount: number = 1): void {
         const existItem = this.data.items.find((i) => i.id === item.id);
         if (existItem) {
-            existItem.amount += item.amount;
+            existItem.amount += amount;
             return;
         }
-        this.data.items.push(item);
+        this.data.items.push({ id: item.id, amount: amount });
     }
 }
 

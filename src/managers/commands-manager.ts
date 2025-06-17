@@ -13,6 +13,7 @@ import CumCommand from "../commands/cum-command";
 import HelpCommand from "../commands/help-command";
 import MasturbateCommand from "../commands/masturbate-command";
 import InvCommand from "../commands/inv-command";
+import ShareCommand from "../commands/share-command";
 
 class CommandsManager {
     private commands: Command[] = [
@@ -28,6 +29,7 @@ class CommandsManager {
         new CumCommand(),
         new MasturbateCommand(),
         new InvCommand(),
+        new ShareCommand(),
     ];
 
     getAvailableCommands(): Command[] {

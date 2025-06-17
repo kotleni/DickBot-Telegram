@@ -5,6 +5,7 @@ import TelegramBot, {
 import { Command } from "./command";
 import { Api } from "../api";
 import { renderDuelEndResult, renderDuelStartResult } from "../rendering";
+import { getReplyMessageFromId } from "../utils";
 
 class DuelCommand extends Command {
     name = "duel";
@@ -21,7 +22,7 @@ class DuelCommand extends Command {
         }
 
         const initiatorId = msg.from!.id.toString();
-        const opponentId = msg.reply_to_message.from?.id.toString();
+        const opponentId = getReplyMessageFromId(msg)?.toString();
 
         if (initiatorId === opponentId) {
             await api.replyTo(
@@ -32,7 +33,7 @@ class DuelCommand extends Command {
         }
 
         const initiator = api.playersManager.getPlayer(initiatorId);
-        const opponent = api.playersManager.getPlayer(opponentId);
+        const opponent = api.playersManager.getPlayer(opponentId!!);
 
         if (opponent === undefined) {
             await api.replyTo(

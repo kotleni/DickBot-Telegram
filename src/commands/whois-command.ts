@@ -2,6 +2,7 @@ import { Command } from "./command";
 import { Message } from "node-telegram-bot-api";
 import { Api } from "../api";
 import { renderPlayerProfile } from "../rendering";
+import { getReplyMessageFromId } from "../utils";
 
 class WhoisCommand extends Command {
     name = "whois";
@@ -9,11 +10,14 @@ class WhoisCommand extends Command {
     isRegisteredOnly = true;
 
     async execute(msg: Message, args: string[], api: Api) {
-        const userId = (msg.reply_to_message?.from?.id?.toString() ??
-            msg.from?.id.toString())!!;
+        const replyToUserId = getReplyMessageFromId(msg);
+        const userId = (replyToUserId?.toString() ?? msg.from?.id.toString())!!;
 
         const player = api.playersManager.getPlayer(userId);
-        if (player === undefined) return;
+        if (player === undefined) {
+            await api.replyTo(msg, "Цей гравець не зареєстрований.");
+            return;
+        }
 
         const output = renderPlayerProfile(player!!);
         await api.replyTo(msg, output);

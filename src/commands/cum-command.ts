@@ -1,6 +1,7 @@
 import { Command } from "./command";
 import { Api } from "../api";
 import { Message } from "node-telegram-bot-api";
+import { getReplyMessageFromId } from "../utils";
 
 class CumCommand extends Command {
     name = "cum";
@@ -12,7 +13,7 @@ class CumCommand extends Command {
 
         const player = api.playersManager.getPlayer(userId)!;
 
-        const opponentId = msg.reply_to_message?.from?.id.toString();
+        const opponentId = getReplyMessageFromId(msg)?.toString();
         if (opponentId === undefined) {
             await api.replyTo(
                 msg,

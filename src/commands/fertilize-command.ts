@@ -1,6 +1,7 @@
 import { Command } from "./command";
 import { Message } from "node-telegram-bot-api";
 import { Api } from "../api";
+import { getReplyMessageFromId } from "../utils";
 
 class FertilizeCommand extends Command {
     name = "fertilize";
@@ -10,7 +11,7 @@ class FertilizeCommand extends Command {
     async execute(msg: Message, args: string[], api: Api) {
         const player = api.playersManager.getPlayer(msg.from!.id.toString())!;
 
-        const opponentId = msg.reply_to_message?.from?.id.toString();
+        const opponentId = getReplyMessageFromId(msg)?.toString();
 
         if (opponentId === undefined) {
             await api.replyTo(

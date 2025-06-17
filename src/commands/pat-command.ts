@@ -2,6 +2,7 @@ import { Command } from "./command";
 import { DicksGame } from "../dicks-game";
 import { Message } from "node-telegram-bot-api";
 import { Api } from "../api";
+import { getReplyMessageFromId } from "../utils";
 
 class PatCommand extends Command {
     name = "pat";
@@ -13,7 +14,7 @@ class PatCommand extends Command {
             msg.from?.id.toString() ?? "",
         );
         if (player === undefined) return;
-        const opponentId = msg.reply_to_message?.from?.id;
+        const opponentId = getReplyMessageFromId(msg)?.toString();
 
         if (opponentId === undefined) {
             await api.replyTo(
@@ -23,9 +24,7 @@ class PatCommand extends Command {
             return;
         }
 
-        const opponent = api.playersManager.getPlayer(
-            msg.reply_to_message?.from?.id.toString() ?? "",
-        );
+        const opponent = api.playersManager.getPlayer(opponentId);
 
         await api.replyTo(
             msg,

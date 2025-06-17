@@ -12,6 +12,7 @@ import FertilizeCommand from "../commands/fertilize-command";
 import CumCommand from "../commands/cum-command";
 import HelpCommand from "../commands/help-command";
 import MasturbateCommand from "../commands/masturbate-command";
+import InvCommand from "../commands/inv-command";
 
 class CommandsManager {
     private commands: Command[] = [
@@ -26,6 +27,7 @@ class CommandsManager {
         new FertilizeCommand(),
         new CumCommand(),
         new MasturbateCommand(),
+        new InvCommand(),
     ];
 
     getAvailableCommands(): Command[] {

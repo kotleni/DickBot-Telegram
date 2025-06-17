@@ -5,6 +5,7 @@ interface PlayerData {
     score: number;
     fertilizations: number;
     cums: number;
+    items: Item[];
 }
 
 function createPlayerData(firstName: string, username: string): PlayerData {
@@ -15,6 +16,7 @@ function createPlayerData(firstName: string, username: string): PlayerData {
         score: 0,
         fertilizations: 0,
         cums: 0,
+        items: [],
     };
 }
 
@@ -32,6 +34,11 @@ interface GenderRule {
     name: string;
     minSize: number;
     maxSize: number;
+}
+
+interface Item {
+    id: string;
+    amount: number;
 }
 
 class GenderResolver {
@@ -136,6 +143,20 @@ class Player {
 
     incrementCums(): number {
         return ++this.data.cums;
+    }
+
+    getItems(): Item[] {
+        if (this.data.items === undefined) this.data.items = [];
+        return this.data.items;
+    }
+
+    addItem(item: Item): void {
+        const existItem = this.data.items.find((i) => i.id === item.id);
+        if (existItem) {
+            existItem.amount += item.amount;
+            return;
+        }
+        this.data.items.push(item);
     }
 }
 

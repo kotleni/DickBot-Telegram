@@ -33,8 +33,8 @@ class TopDicksCommand extends Command {
       return prev.getCums() > curr.getCums() ? prev : curr;
     });
 
-    output2 += `\n\nЧастіше всього кінчає - ${bestFertilizer.getFirstName()}`;
-    output2 += `\nЧастіше всього трахають - ${bestCummer.getFirstName()}`;
+    output2 += `\n\nЧастіше всього кінчає - ${bestCummer.getFirstName()}`;
+    output2 += `\nЧастіше всього трахають - ${bestFertilizer.getFirstName()}`;
     await api.replyTo(msg, output2);
   }
 }

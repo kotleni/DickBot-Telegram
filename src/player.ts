@@ -122,7 +122,7 @@ class Player {
   }
 
   cutDick(amountValue: number) {
-    this.data.dickSize += amountValue;
+    this.data.dickSize -= amountValue;
   }
 
   getPlayerData() {

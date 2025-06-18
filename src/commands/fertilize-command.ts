@@ -23,7 +23,7 @@ class FertilizeCommand extends Command {
 
         const opponent = api.playersManager.getPlayer(opponentId!!);
         const requirement = 90;
-        const cost = 1;
+        const cost = 2;
 
         if (player.getDickSize() < requirement) {
             await api.replyTo(
@@ -35,7 +35,7 @@ class FertilizeCommand extends Command {
 
         player.addScore(18);
         player.incrementCums();
-        opponent?.addScore(2);
+        opponent?.addScore(18);
 
         player.addDickSize(cost);
         opponent?.addDickSize(cost);
@@ -44,7 +44,7 @@ class FertilizeCommand extends Command {
 
         await api.replyTo(
             msg,
-            `🧬 Ви запліднили гравця ${opponent?.getFirstName()}!\n+2 см для обох прутнів...`,
+            `🧬 Ви запліднили гравця ${opponent?.getFirstName()}!\n+${cost} см для обох прутнів...`,
         );
     }
 }

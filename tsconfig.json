@@ -1,16 +1,11 @@
-// tsconfig.json
 {
+    "extends": "./tsconfig-google.json",
     "compilerOptions": {
-        "target": "ES2022",
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext",
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "outDir": "./dist",
-        "rootDir": "./src"
+        "rootDir": ".",
+        "outDir": "build",
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true
     },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules"]
+    "include": [".eslintrc.json", "src/**/*.ts", "test/**/*.ts"],
+    "exclude": ["test/fixtures/**/*.*", "template/**/*.*"]
 }

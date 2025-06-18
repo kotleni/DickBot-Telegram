@@ -1,111 +1,110 @@
-import { Player } from "./player";
-import { Case } from "./managers/cases-manager";
+import {Player} from './player';
+import {Case} from './managers/cases-manager';
 
 function renderProgressBar(
-    current: number,
-    start: number,
-    end: number,
-    length: number = 10,
+  current: number,
+  start: number,
+  end: number,
+  length: number = 10,
 ): string {
-    if (end <= start) {
-        return `[${"█".repeat(length)}] 100%`;
-    }
+  if (end <= start) {
+    return `[${'█'.repeat(length)}] 100%`;
+  }
 
-    const progress = Math.max(0, current - start);
-    const total = end - start;
-    const percentage = Math.min(1, progress / total);
+  const progress = Math.max(0, current - start);
+  const total = end - start;
+  const percentage = Math.min(1, progress / total);
 
-    const filledCount = Math.round(percentage * length);
-    const emptyCount = length - filledCount;
+  const filledCount = Math.round(percentage * length);
+  const emptyCount = length - filledCount;
 
-    const filledChars = "█".repeat(filledCount);
-    const emptyChars = "▒".repeat(emptyCount);
+  const filledChars = '█'.repeat(filledCount);
+  const emptyChars = '▒'.repeat(emptyCount);
 
-    return `[${filledChars}${emptyChars}] ${Math.round(percentage * 100)}%`;
+  return `[${filledChars}${emptyChars}] ${Math.round(percentage * 100)}%`;
 }
 
 function renderPlayerProfile(player: Player): string {
-    const gender = player.getPlayerGender();
-    const dickSize = player.getDickSize();
+  const gender = player.getPlayerGender();
+  const dickSize = player.getDickSize();
 
-    const rangProgressBar = renderProgressBar(
-        dickSize,
-        gender.currentRule.minSize,
-        gender.nextRule.minSize,
-    );
+  const rangProgressBar = renderProgressBar(
+    dickSize,
+    gender.currentRule.minSize,
+    gender.nextRule.minSize,
+  );
 
-    let buffer = `Гравець ${player.getFirstName()}`;
-    buffer += `\n🎯 Ранг: ${gender.name}`;
-    buffer += `\n (Наступний: ${gender.nextRule.name}, треба ще ${gender.nextRule.minSize - player.getDickSize()} см)`;
-    buffer += "\n" + rangProgressBar;
-    buffer += "\n";
-    if (player.isHaveDick()) buffer += `\n🍆 Пеніс: ${player.getDickSize()} см`;
-    else buffer += `\n🍆 Немає пенісу. (Відновити: /dick)`;
-    buffer += `\n⭐️ XP: ${player.getScore()}`;
-    buffer += `\n🤍 Кінчив разів: ${player.getCums()}`;
-    buffer += `\n🧬️ Відтраханий разів: ${player.getFertilizations()}`;
-    // buffer += `\n\nОстанній відома юзерка: @${player.getUsername()}`;
-    return buffer;
+  let buffer = `Гравець ${player.getFirstName()}`;
+  buffer += `\n🎯 Ранг: ${gender.name}`;
+  buffer += `\n (Наступний: ${gender.nextRule.name}, треба ще ${gender.nextRule.minSize - player.getDickSize()} см)`;
+  buffer += '\n' + rangProgressBar;
+  buffer += '\n';
+  if (player.isHaveDick()) buffer += `\n🍆 Пеніс: ${player.getDickSize()} см`;
+  else buffer += '\n🍆 Немає пенісу. (Відновити: /dick)';
+  buffer += `\n⭐️ XP: ${player.getScore()}`;
+  buffer += `\n🤍 Кінчив разів: ${player.getCums()}`;
+  buffer += `\n🧬️ Відтраханий разів: ${player.getFertilizations()}`;
+  // buffer += `\n\nОстанній відома юзерка: @${player.getUsername()}`;
+  return buffer;
 }
 
 function renderCaseResult(situationCase: Case, player: Player): string {
-    const situationValue = situationCase.value;
-    let growthMessage = situationCase.message;
-    if (situationValue > 0) growthMessage += `\n+ ${situationValue} см`;
-    if (situationValue < 0)
-        growthMessage += `\n- ${Math.abs(situationValue)} см`;
+  const situationValue = situationCase.value;
+  let growthMessage = situationCase.message;
+  if (situationValue > 0) growthMessage += `\n+ ${situationValue} см`;
+  if (situationValue < 0) growthMessage += `\n- ${Math.abs(situationValue)} см`;
 
-    return `${growthMessage}\n\n🍆Тепер у вас пеніс <b>${player.getDickSize()}</b> см.`;
+  return `${growthMessage}\n\n🍆Тепер у вас пеніс <b>${player.getDickSize()}</b> см.`;
 }
 
 function renderPlayerLine(player: Player, place: number): string {
-    function stripOrExpandName(name: string): string {
-        const requireLength = 10;
-        if (name.length > requireLength) {
-            return `${name.slice(0, requireLength)}`;
-        }
-        return name.padEnd(requireLength, " ");
+  function stripOrExpandName(name: string): string {
+    const requireLength = 10;
+    if (name.length > requireLength) {
+      return `${name.slice(0, requireLength)}`;
     }
-    function simplifyName(name: string, fallbackName: string): string {
-        const resultName = name.replace(/[^a-zA-Zа-яА-Я]/g, "");
-        if (resultName.length > 0) return resultName;
-        return fallbackName;
-    }
-    function expandValue(value: number, requireLength: number): string {
-        const line = value.toString();
-        return line.padStart(requireLength, " ");
-    }
-    const name = stripOrExpandName(
-        simplifyName(player.getFirstName(), player.getUsername()),
-    );
-    const dickSize = expandValue(player.getDickSize(), 3);
-    const score = expandValue(player.getScore(), 5);
-    return `${place + 1}. ${name} ${dickSize} см (${score} XP)`;
+    return name.padEnd(requireLength, ' ');
+  }
+  function simplifyName(name: string, fallbackName: string): string {
+    const resultName = name.replace(/[^a-zA-Zа-яА-Я]/g, '');
+    if (resultName.length > 0) return resultName;
+    return fallbackName;
+  }
+  function expandValue(value: number, requireLength: number): string {
+    const line = value.toString();
+    return line.padStart(requireLength, ' ');
+  }
+  const name = stripOrExpandName(
+    simplifyName(player.getFirstName(), player.getUsername()),
+  );
+  const dickSize = expandValue(player.getDickSize(), 3);
+  const score = expandValue(player.getScore(), 5);
+  return `${place + 1}. ${name} ${dickSize} см (${score} XP)`;
 }
 
 function renderDuelStartResult(player1: Player, player2: Player): string {
-    return `⚠️ Гравець ${player1.getFirstName()} визвав гравця ${player2.getFirstName()} на дуель!`;
+  return `⚠️ Гравець ${player1.getFirstName()} визвав гравця ${player2.getFirstName()} на дуель!`;
 }
 
 function renderDuelEndResult(
-    winner: Player,
-    allPlayers: Player[],
-    cost: number,
+  winner: Player,
+  allPlayers: Player[],
+  cost: number,
 ): string {
-    let firstPart = `🎉 Гравець ${winner.getFirstName()} переміг, бо довше не кінчав!`;
-    allPlayers.forEach((player) => {
-        if (winner === player) firstPart += "\n+ ";
-        else firstPart += "\n- ";
-        // TODO: Make clickable name for user
-        firstPart += cost.toString() + ` см для ${player.getFirstName()}`;
-    });
-    return firstPart;
+  let firstPart = `🎉 Гравець ${winner.getFirstName()} переміг, бо довше не кінчав!`;
+  allPlayers.forEach(player => {
+    if (winner === player) firstPart += '\n+ ';
+    else firstPart += '\n- ';
+    // TODO: Make clickable name for user
+    firstPart += cost.toString() + ` см для ${player.getFirstName()}`;
+  });
+  return firstPart;
 }
 
 export {
-    renderPlayerProfile,
-    renderCaseResult,
-    renderPlayerLine,
-    renderDuelStartResult,
-    renderDuelEndResult,
+  renderPlayerProfile,
+  renderCaseResult,
+  renderPlayerLine,
+  renderDuelStartResult,
+  renderDuelEndResult,
 };

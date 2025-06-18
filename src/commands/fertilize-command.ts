@@ -6,7 +6,6 @@ import {getReplyMessageFromId} from '../utils';
 class FertilizeCommand extends Command {
   name = 'fertilize';
   description = 'Осіменити гравця.';
-  isRegisteredOnly = true;
 
   async execute(msg: Message, args: string[], api: Api) {
     const player = api.playersManager.getPlayer(msg.from!.id.toString())!;

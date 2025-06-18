@@ -4,7 +4,8 @@ import {Api} from '../api';
 abstract class Command {
   abstract name: string;
   abstract description: string;
-  abstract isRegisteredOnly: boolean;
+  isRegisteredOnly: boolean = true;
+  isAdminOnly: boolean = false;
 
   abstract execute(msg: Message, args: string[], api: Api): Promise<void>;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

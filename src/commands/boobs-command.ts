@@ -6,7 +6,6 @@ import {createWaifuService, WaifuService} from '../services/WaifuService';
 class BoobsCommand extends Command {
   name = 'boobs';
   description = 'Получити випадкову аніме картинку.';
-  isRegisteredOnly = true;
 
   private waifuService: WaifuService = createWaifuService();
 

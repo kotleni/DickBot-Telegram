@@ -6,7 +6,6 @@ import {getReplyMessageFromId} from '../utils';
 class CumCommand extends Command {
   name = 'cum';
   description = 'Кінчити та спробувати поцілити у гравця.';
-  isRegisteredOnly = true;
 
   async execute(msg: Message, args: string[], api: Api) {
     const userId = msg.from!.id.toString();

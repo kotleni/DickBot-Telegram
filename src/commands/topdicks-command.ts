@@ -6,7 +6,6 @@ import {renderPlayerLine} from '../rendering';
 class TopDicksCommand extends Command {
   name = 'topdicks';
   description = 'Показати топ дрочерів.';
-  isRegisteredOnly = true;
 
   async execute(msg: TelegramBot.Message, args: string[], api: Api) {
     const allPlayers = api.playersManager.getAllPlayers();

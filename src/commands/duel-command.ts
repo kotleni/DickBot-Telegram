@@ -10,7 +10,6 @@ import {getReplyMessageFromId} from '../utils';
 class DuelCommand extends Command {
   name = 'duel';
   description = 'Запросити гравця на дуель.';
-  isRegisteredOnly = true;
 
   async execute(msg: Message, args: string[], api: Api) {
     if (!msg.reply_to_message?.from) {

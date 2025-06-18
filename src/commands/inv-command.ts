@@ -6,7 +6,6 @@ import {CatEars, getItemById} from '../items';
 class InvCommand extends Command {
   name = 'inv';
   description = 'Переглянути інвентар.';
-  isRegisteredOnly = true;
 
   async execute(msg: TelegramBot.Message, args: string[], api: Api) {
     const player = api.playersManager.getPlayer(msg.from!.id.toString())!;

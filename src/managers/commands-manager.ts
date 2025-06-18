@@ -14,6 +14,9 @@ import HelpCommand from '../commands/help-command';
 import MasturbateCommand from '../commands/masturbate-command';
 import InvCommand from '../commands/inv-command';
 import ShareCommand from '../commands/share-command';
+import {BotConfig} from '../bot-config';
+import {Player} from '../player';
+import {AdminCommand} from '../commands/admin-command';
 
 class CommandsManager {
   private commands: Command[] = [
@@ -30,15 +33,66 @@ class CommandsManager {
     new MasturbateCommand(),
     new InvCommand(),
     new ShareCommand(),
+    new AdminCommand(),
   ];
 
   getAvailableCommands(): Command[] {
     return this.commands;
   }
 
-  async processCommandMessage(msg: Message, dicksGame: DicksGame) {
+  private canExecuteCommand(
+    command: Command,
+    player: Player | undefined,
+    config: BotConfig,
+  ): boolean {
+    const isRegisteredCommand = command.isRegisteredOnly;
+    const isAdminCommand = command.isAdminOnly;
+
+    if (isRegisteredCommand && !player) return false;
+    if (isAdminCommand && !config.isAdmin(player?.getId())) return false;
+    if (config.isBlockedCommand(command.name)) return false;
+    return true;
+  }
+
+  async processCommandMessage(
+    msg: Message,
+    config: BotConfig,
+    dicksGame: DicksGame,
+  ) {
+    const player = dicksGame.playersManager.getPlayer(
+      msg.from?.id.toString() ?? '',
+    );
+    const isPlayerRegistered = player !== undefined;
+
     for (const command of this.commands) {
       if (msg.text?.startsWith(`/${command.name}`)) {
+        const isRequireBeRegistered = command.isRegisteredOnly;
+
+        // Prevent use of command if require be registered and player not registered
+        if (isRequireBeRegistered && !isPlayerRegistered) {
+          await dicksGame.replyTo(
+            msg,
+            'Для використання цієї команди вам потрібно зареєструватися.\n/register',
+          );
+          return;
+        }
+
+        // Prevent use of command if player not has permission to use it
+        if (
+          !this.canExecuteCommand(
+            command,
+            dicksGame.playersManager.getPlayer(msg.from?.id.toString() ?? ''),
+            config,
+          )
+        ) {
+          await dicksGame.replyTo(
+            msg,
+            'Ви не можете використовувати цю команду.',
+          );
+          return;
+        }
+
+        // Finally - execute
         await command.execute(
           msg,
           msg.text?.split(' ')?.slice(1) ?? [],

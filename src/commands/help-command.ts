@@ -5,7 +5,6 @@ import {Api} from '../api';
 class HelpCommand extends Command {
   name = 'help';
   description = 'Показати список команд.';
-  isRegisteredOnly = false;
 
   async execute(msg: Message, args: string[], api: Api) {
     const commands = api.commandsManager.getAvailableCommands();

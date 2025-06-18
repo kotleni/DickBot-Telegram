@@ -6,7 +6,6 @@ import {Api} from '../api';
 class DickCommand extends Command {
   name = 'dick';
   description = 'Погратися з прутнем.';
-  isRegisteredOnly = true;
 
   // Cooldown management properties
   private dickCommandCooldowns = new Map<string, number>();

@@ -7,7 +7,6 @@ import {getReplyMessageFromId} from '../utils';
 class WhoisCommand extends Command {
   name = 'whois';
   description = 'Показати профіль гравця.';
-  isRegisteredOnly = true;
 
   async execute(msg: Message, args: string[], api: Api) {
     const replyToUserId = getReplyMessageFromId(msg);

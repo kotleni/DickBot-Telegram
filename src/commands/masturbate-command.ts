@@ -5,7 +5,6 @@ import {Api} from '../api';
 class MasturbateCommand extends Command {
   name = 'masturbate';
   description = 'Зайнятися дрочкою.';
-  isRegisteredOnly = true;
 
   // Cooldown management properties
   private dickCommandCooldowns = new Map<string, number>();

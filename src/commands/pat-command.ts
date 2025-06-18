@@ -6,7 +6,6 @@ import {getReplyMessageFromId} from '../utils';
 class PatCommand extends Command {
   name = 'pat';
   description = 'Попестити гравця.';
-  isRegisteredOnly = false;
 
   async execute(msg: Message, args: string[], api: Api) {
     const player = api.playersManager.getPlayer(msg.from?.id.toString() ?? '');

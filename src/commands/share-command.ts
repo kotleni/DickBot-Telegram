@@ -6,7 +6,6 @@ import {getReplyMessageFromId} from '../utils';
 class ShareCommand extends Command {
   name = 'share';
   description = 'Віддати частину пеніса гравцю.';
-  isRegisteredOnly = true;
 
   async execute(msg: Message, args: string[], api: Api) {
     const amount = args[0];

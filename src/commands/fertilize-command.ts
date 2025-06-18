@@ -35,7 +35,7 @@ class FertilizeCommand extends Command {
 
         player.addScore(18);
         player.incrementCums();
-        opponent?.addScore(1);
+        opponent?.addScore(2);
 
         player.addDickSize(cost);
         opponent?.addDickSize(cost);
@@ -44,7 +44,7 @@ class FertilizeCommand extends Command {
 
         await api.replyTo(
             msg,
-            `🧬 Ви запліднили гравця ${opponent?.getFirstName()}!\n+1 см для обох прутнів...`,
+            `🧬 Ви запліднили гравця ${opponent?.getFirstName()}!\n+2 см для обох прутнів...`,
         );
     }
 }

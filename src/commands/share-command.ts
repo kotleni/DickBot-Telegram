@@ -26,6 +26,11 @@ class ShareCommand extends Command {
 
         const amountValue = parseInt(amount);
 
+        if (amountValue < 1 || amountValue > 100) {
+            await api.replyTo(msg, "Передати за раз можна від 1 до 100 см.");
+            return;
+        }
+
         if (player.getDickSize() < amountValue) {
             await api.replyTo(
                 msg,

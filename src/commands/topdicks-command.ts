@@ -33,11 +33,8 @@ class TopDicksCommand extends Command {
       return prev.getCums() > curr.getCums() ? prev : curr;
     });
 
-    const bestFertilizerLink = `<a href="tg://user?id=${bestFertilizer.getId()}">${bestFertilizer.getFirstName()}</a>`;
-    const bestCummerLink = `<a href="tg://user?id=${bestCummer.getId()}">${bestCummer.getFirstName()}</a>`;
-
-    output2 += `\n\nЧастіше всього кінчає - ${bestCummerLink}`;
-    output2 += `\nЧастіше всього трахають - ${bestFertilizerLink}`;
+    output2 += `\n\nЧастіше всього кінчає - ${bestFertilizer.getFirstName()}`;
+    output2 += `\nЧастіше всього трахають - ${bestCummer.getFirstName()}`;
     await api.replyTo(msg, output2);
   }
 }

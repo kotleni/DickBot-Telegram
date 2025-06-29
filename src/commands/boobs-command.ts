@@ -14,14 +14,15 @@ class BoobsCommand extends Command {
     args: string[],
     api: Api,
   ): Promise<void> {
-    const category = args[1] ?? 'cuddle';
-    const type = args[2] ?? 'sfw';
+    const category = args[1] ?? 'waifu';
+    const type = args[2] ?? 'nsfw';
 
     const url = await this.waifuService.getPicture(type, category);
     await api.bot?.sendPhoto(msg.chat.id, url ?? '', {
       caption: '🤪',
       parse_mode: 'HTML',
       has_spoiler: true,
+      reply_to_message_id: msg.message_id,
     });
   }
 }

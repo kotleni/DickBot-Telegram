@@ -4,7 +4,9 @@
         "rootDir": ".",
         "outDir": "build",
         "resolveJsonModule": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "module": "CommonJS",
+        "esModuleInterop": true
     },
     "include": [".eslintrc.json", "src/**/*.ts", "test/**/*.ts"],
     "exclude": ["test/fixtures/**/*.*", "template/**/*.*"]

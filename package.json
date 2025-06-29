@@ -3,8 +3,9 @@
     "version": "1.0.0",
     "description": "",
     "main": "src/index.ts",
+    "packageManager": "pnpm@10.12.2",
     "scripts": {
-        "dev": "tsx --watch src/index.ts",
+        "dev": "ts-node src/index.ts",
         "lint": "eslint '**/*.ts'",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
@@ -23,7 +24,8 @@
         "eslint-plugin-prettier": "5.2.1",
         "node-telegram-bot-api": "^0.66.0",
         "prettier": "^3.5.3",
-        "request": "^2.88.2"
+        "request": "^2.88.2",
+        "ts-node": "^10.9.2"
     },
     "devDependencies": {
         "@types/node": "^24.0.1",

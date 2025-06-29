@@ -1,7 +1,7 @@
 import {Command} from './command';
 import TelegramBot from 'node-telegram-bot-api';
 import {Api} from '../api';
-import {createWaifuService, WaifuService} from '../services/WaifuService';
+import {createWaifuService, WaifuService} from '../services/waifu-service';
 
 class BoobsCommand extends Command {
   name = 'boobs';

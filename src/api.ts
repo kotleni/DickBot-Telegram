@@ -5,13 +5,13 @@ import TelegramBot, {Message} from 'node-telegram-bot-api';
 import {BotConfig} from './bot-config';
 
 interface Api {
-  casesManager: CaseManager;
-  playersManager: PlayersManager;
-  commandsManager: CommandsManager;
-  config: BotConfig;
-  bot: TelegramBot | undefined;
+    casesManager: CaseManager;
+    playersManager: PlayersManager;
+    commandsManager: CommandsManager;
+    config: BotConfig;
+    bot: TelegramBot | undefined;
 
-  replyTo(msg: Message, text: string): Promise<Message | undefined>;
+    replyTo(msg: Message, text: string): Promise<Message | undefined>;
 }
 
 export {Api};

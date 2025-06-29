@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@typescript-eslint/parser':
+        specifier: ^8.35.0
+        version: 8.35.0(eslint@8.57.1)(typescript@5.8.3)
       axios:
         specifier: ^1.10.0
         version: 1.10.0

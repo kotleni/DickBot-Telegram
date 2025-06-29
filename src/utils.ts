@@ -16,8 +16,8 @@ import {Message} from 'node-telegram-bot-api';
  *                               a reply to another user's message.
  */
 export function getReplyMessageFromId(msg: Message): number | undefined {
-  const isReplyToTopic =
-    msg.reply_to_message?.forum_topic_created?.name !== undefined;
-  if (isReplyToTopic) return undefined;
-  return msg.reply_to_message?.from?.id;
+    const isReplyToTopic =
+        msg.reply_to_message?.forum_topic_created?.name !== undefined;
+    if (isReplyToTopic) return undefined;
+    return msg.reply_to_message?.from?.id;
 }

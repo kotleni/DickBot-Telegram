@@ -12,6 +12,11 @@ class FertilizeCommand extends Command {
 
     const opponentId = getReplyMessageFromId(msg)?.toString();
 
+    if (opponentId === player.getId()) {
+      await api.replyTo(msg, 'Ви не можете запліднити самого себе!');
+      return;
+    }
+
     if (opponentId === undefined) {
       await api.replyTo(
         msg,

@@ -97,14 +97,11 @@ class CumCommand extends Command {
             const playerFirstName = player.getFirstName();
             const secondPlayerFirstName = secondPlayer.getFirstName();
 
-            const playerLink = `<a href="tg://user?id=${player.getId()}">${playerFirstName}</a>`;
-            const secondPlayerLink = `<a href="tg://user?id=${secondPlayer.getId()}">${secondPlayerFirstName}</a>`;
-
             const randomPart = parts[Math.floor(Math.random() * parts.length)];
 
             await api.replyTo(
                 msg,
-                `Жах! 😍\nГравець ${playerLink} обкінчав ${randomPart} гравця ${secondPlayerLink}.`,
+                `Жах! 😍\nГравець ${playerFirstName} обкінчав ${randomPart} гравця ${secondPlayerFirstName}.`,
             );
         } else {
             await api.replyTo(msg, 'Мимо... Нікого не заділо...');

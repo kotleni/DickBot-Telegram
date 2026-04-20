@@ -1,0 +1,50 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dickbot
+  labels:
+    app: dickbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dickbot
+  template:
+    metadata:
+      labels:
+        app: dickbot
+    spec:
+      tolerations:
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 60
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 60
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - rookies
+      containers:
+        - name: dickbot
+          image: kotleni/dickbot-tg
+          envFrom:
+            - secretRef:
+                name: dickbot-env 
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/data/players-v2.json
+              subPath: config.json
+      volumes:
+        - name: config-volume
+          configMap:
+            name: dickbot-config

@@ -4,7 +4,7 @@ import * as fs from 'node:fs';
 type UserCollection = Record<string, PlayerData>;
 
 class PlayersManager {
-    private readonly dataFilePath: string = 'players-v2.json';
+    private readonly dataFilePath: string = 'data/players-v2.json';
     private players: Player[] = [];
 
     load(): Player[] {

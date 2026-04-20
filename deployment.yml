@@ -33,18 +33,10 @@ spec:
                                   - key: kubernetes.io/hostname
                                     operator: In
                                     values:
-                                        - rookies
+                                        - rookie
             containers:
                 - name: dickbot
                   image: kotleni/dickbot-tg
                   envFrom:
                       - secretRef:
                             name: dickbot-env
-                  volumeMounts:
-                      - name: config-volume
-                        mountPath: /app/data/players-v2.json
-                        subPath: config.json
-            volumes:
-                - name: config-volume
-                  configMap:
-                      name: dickbot-config

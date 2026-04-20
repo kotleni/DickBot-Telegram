@@ -16,6 +16,8 @@ class PlayersManager {
         // Construct URL: redis://user:password@host:port
         const url = `redis://${REDIS_USER}:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}`;
 
+        console.log('Connecting to Redis with URL:', url);
+
         this.client = createClient({url});
 
         this.client.on('error', err =>

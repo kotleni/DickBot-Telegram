@@ -17,6 +17,7 @@ import ShareCommand from '../commands/share-command';
 import {BotConfig} from '../bot-config';
 import {Player} from '../player';
 import {AdminCommand} from '../commands/admin-command';
+import BackupCommand from '../commands/backup-command';
 
 class CommandsManager {
     private commands: Command[] = [
@@ -34,6 +35,7 @@ class CommandsManager {
         new InvCommand(),
         new ShareCommand(),
         new AdminCommand(),
+        new BackupCommand(),
     ];
 
     getAvailableCommands(): Command[] {

@@ -17,7 +17,7 @@ class RegisterCommand extends Command {
 
         const userName = msg.from!.username ?? msg.from!.id.toString();
         const firstName = msg.from!.first_name;
-        const newPlayer = api.playersManager.createPlayer(
+        const newPlayer = await api.playersManager.createPlayer(
             userId,
             userName,
             firstName,

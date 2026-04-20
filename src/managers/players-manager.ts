@@ -1,58 +1,76 @@
-import {createPlayer, createPlayerData, Player, PlayerData} from '../player';
-import * as fs from 'node:fs';
+import { createPlayer, createPlayerData, Player, PlayerData } from '../player';
+import { createClient, RedisClientType } from 'redis';
+import 'dotenv/config';
 
 type UserCollection = Record<string, PlayerData>;
 
 class PlayersManager {
-    private readonly dataFilePath: string = 'data/players-v2.json';
+    private client: RedisClientType;
+    private readonly REDIS_KEY: string = 'players:v2';
     private players: Player[] = [];
 
-    load(): Player[] {
+    constructor() {
+        const { REDIS_USER, REDIS_PASSWORD, REDIS_HOST, REDIS_PORT } = process.env;
+        
+        // Construct URL: redis://user:password@host:port
+        const url = `redis://${REDIS_USER}:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}`;
+
+        this.client = createClient({ url });
+
+        this.client.on('error', (err) => console.error('Redis Client Error', err));
+    }
+
+    async init(): Promise<void> {
+        if (!this.client.isOpen) {
+            await this.client.connect();
+        }
+        await this.load();
+    }
+
+    async load(): Promise<Player[]> {
         try {
-            if (!fs.existsSync(this.dataFilePath)) {
+            const rawData = await this.client.get(this.REDIS_KEY);
+            
+            if (!rawData) {
+                this.players = [];
                 return [];
             }
-            const rawData = fs.readFileSync(this.dataFilePath, 'utf8');
+
             const collection = JSON.parse(rawData) as UserCollection;
 
-            const players = Object.entries(collection).map(
-                ([userId, playerData]) => {
-                    return createPlayer(playerData, userId);
-                },
+            this.players = Object.entries(collection).map(
+                ([userId, playerData]) => createPlayer(playerData, userId)
             );
-            this.players = players;
-            return players;
+
+            return this.players;
         } catch (error) {
-            console.warn(
-                'Помилка завантаження players.json, створюю нові дані.',
-                error,
-            );
+            console.warn('Помилка завантаження з Redis, ініціалізація порожнім списком.', error);
+            this.players = [];
             return [];
         }
     }
 
-    save(): void {
+    async save(): Promise<void> {
         try {
-            // Transform the array of Player instances back into an object
             const userCollection = this.players.reduce<UserCollection>(
                 (collection, player) => {
-                    const playerData = player.getPlayerData();
-                    // We use the player's ID as the key
-                    collection[String(player.getId())] = playerData;
+                    collection[String(player.getId())] = player.getPlayerData();
                     return collection;
                 },
                 {},
             );
 
-            const json = JSON.stringify(userCollection, null, 2);
-            fs.writeFileSync(this.dataFilePath, json, 'utf8');
-            console.log('Saved', this.players.length, 'users.');
+            const json = JSON.stringify(userCollection);
+            await this.client.set(this.REDIS_KEY, json);
+            
+            console.log('Saved', this.players.length, 'users to Redis.');
         } catch (error) {
-            console.error('Помилка збереження даних:', error);
+            console.error('Помилка збереження в Redis:', error);
         }
     }
 
     getPlayer(userId: string): Player | undefined {
+        // Since we keep a local cache in this.players, this remains synchronous
         return this.players.find(player => player.getId() === userId);
     }
 
@@ -60,19 +78,24 @@ class PlayersManager {
         return this.players;
     }
 
-    createPlayer(userId: string, username: string, firstName: string): Player {
+    async createPlayer(userId: string, username: string, firstName: string): Promise<Player> {
         const player = createPlayer(
             createPlayerData(firstName, username),
             userId,
         );
         this.players.push(player);
-        this.save();
+        await this.save();
         return player;
     }
 
-    getRandomPlayer() {
+    getRandomPlayer(): Player | undefined {
+        if (this.players.length === 0) return undefined;
         return this.players[Math.floor(Math.random() * this.players.length)];
+    }
+
+    async disconnect(): Promise<void> {
+        await this.client.quit();
     }
 }
 
-export {PlayersManager};
+export { PlayersManager };

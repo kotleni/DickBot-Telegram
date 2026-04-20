@@ -22,6 +22,7 @@ class DicksGame implements Api {
             throw new Error('You need to setup .env for TELEGRAM_BOT_TOKEN.');
 
         this.bot = new TelegramBot(token ?? '', {polling: true});
+        this.playersManager.init();
         this.playersManager.load();
 
         this.bot.on('polling_error', err => this.onPolingError(err));
@@ -84,6 +85,7 @@ class DicksGame implements Api {
 
     private onPolingError(error: Error) {
         console.error(error);
+        this.playersManager.disconnect();
     }
 }
 

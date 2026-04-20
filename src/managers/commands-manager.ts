@@ -18,6 +18,7 @@ import {BotConfig} from '../bot-config';
 import {Player} from '../player';
 import {AdminCommand} from '../commands/admin-command';
 import BackupCommand from '../commands/backup-command';
+import ImportCommand from '../commands/import-command';
 
 class CommandsManager {
     private commands: Command[] = [
@@ -36,6 +37,7 @@ class CommandsManager {
         new ShareCommand(),
         new AdminCommand(),
         new BackupCommand(),
+        new ImportCommand(),
     ];
 
     getAvailableCommands(): Command[] {
@@ -67,7 +69,9 @@ class CommandsManager {
         const isPlayerRegistered = player !== undefined;
 
         for (const command of this.commands) {
-            if (msg.text?.startsWith(`/${command.name}`)) {
+            const line = msg.text || msg.caption || '';
+            
+            if (line.startsWith(`/${command.name}`)) {
                 const isRequireBeRegistered = command.isRegisteredOnly;
 
                 // Prevent use of command if require be registered and player not registered

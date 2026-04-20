@@ -12,19 +12,19 @@ class BackupCommand extends Command {
         const asJson = JSON.stringify(player?.getPlayerData() ?? {}, null, 2);
 
         const buffer = Buffer.from(asJson, 'utf-8');
-         const messageOptions = {
-        caption: 'Ось ваш бекап даних у форматі JSON.',
-    };
-    const fileOptions = {
-        filename: `backup_${msg.from!.id}.json`,
-        contentType: 'application/json',
-    };
-    await api.bot?.sendDocument(
-        msg.chat.id, 
-        buffer, 
-        messageOptions, 
-        fileOptions
-    );
+        const messageOptions = {
+            caption: 'Ось ваш бекап даних у форматі JSON.',
+        };
+        const fileOptions = {
+            filename: `backup_${msg.from!.id}.json`,
+            contentType: 'application/json',
+        };
+        await api.bot?.sendDocument(
+            msg.chat.id,
+            buffer,
+            messageOptions,
+            fileOptions,
+        );
     }
 }
 

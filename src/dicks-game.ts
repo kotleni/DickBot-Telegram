@@ -26,7 +26,10 @@ class DicksGame implements Api {
         this.playersManager.load();
 
         this.bot.on('polling_error', err => this.onPolingError(err));
-        this.bot.onText(/\//, async msg => {
+        this.bot.on('message', async msg => {
+            const content = msg.text || msg.caption;
+            if (!content || !content.startsWith('/')) return;
+
             const isBanned = this.config.isBanned(
                 msg.from?.id.toString() ?? '',
             );
